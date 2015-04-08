@@ -5,8 +5,18 @@
             ng-click="doSeek($event)">
             {{ player.state.currentTime / player.state.duration }}
         </progress>
-        <div class="show-on-hover">
+        <div class="show-on-hover" ng-class="{'always-show': player.state.scrobble && player.state.currentTrack.lastFmValidate === false}">
             <div class="overlay">
+            </div>
+            <div class="lastfm-manual" ng-if="player.state.scrobble && player.state.currentTrack.lastFmValidate === false">
+                <strong>Help last.fm regconize the track</strong>
+                <md-input-container md-no-float>
+                    <input ng-model="manualScrobble.track" type="text" placeholder="Enter track name">
+                </md-input-container>
+                <md-input-container md-no-float>
+                    <input ng-model="manualScrobble.artist" type="text" placeholder="Enter artist name" />
+                </md-input-container>
+                <md-button class="md-primary" ng-click="sendManualScrobble()">send</md-button>
             </div>
             <a class="view-original-link" href="{{player.state.currentTrack.originalUrl}}" title="View Original">
                 <i ng-if="player.state.currentTrack.origin === 'sc'" class="icon-soundcloud"></i>
@@ -50,8 +60,8 @@
             </md-button>
             <md-button ng-class="{'md-primary': player.state.scrobble, 'md-warn': player.state.scrobble && player.state.currentTrack.lastFmValidate === false}" ng-click="player.toggleScrobble()" class="player-control control-last-fm" title="{{player.state.currentTrack.lastFmValidate === false ? 'track unregconized by last.fm' : 'last.fm scrobble'}}">
                 <i class="icon-lastfm"></i>
-                <span ng-if="player.state.currentTrack.lastFmValidate === false">?</span>
-                <span class="icon ion-checkmark-circled" ng-if="player.state.currentTrack.scrobbled">?</span>
+                <span class="icon ion-help" ng-if="player.state.currentTrack.lastFmValidate === false"></span>
+                <span class="icon ion-checkmark-circled" ng-if="player.state.currentTrack.scrobbled"></span>
             </md-button>
         </section>
     </div>
